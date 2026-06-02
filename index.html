@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartClinic - Sistema de Gerenciamento Médico</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #06b6d4;
+    --primary-dark: #0891b2;
+    --primary-light: #cffafe;
+    --primary-50: #ecfeff;
+    --accent: #14b8a6;
+    --bg: #f0fdfa;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.03);
+    --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+    --radius: 12px;
+    --radius-lg: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--gray-800);
+    min-height: 100vh;
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--gray-200);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 32px;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.logo-text span { color: var(--primary); }
+
+.nav-section {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 12px;
+    margin-bottom: 8px;
+    margin-top: 16px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--gray-600);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.nav-item:hover {
+    background: var(--primary-50);
+    color: var(--primary-dark);
+}
+
+.nav-item.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.nav-item .icon { font-size: 18px; width: 22px; text-align: center; }
+
+.nav-item .badge {
+    margin-left: auto;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.nav-item.active .badge {
+    background: rgba(255,255,255,0.25);
+    color: white;
+}
+
+/* MAIN CONTENT */
+.main {
+    margin-left: 260px;
+    flex: 1;
+    padding: 28px 32px;
+    min-height: 100vh;
+}
+
+/* HEADER */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.page-subtitle {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 4px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-global {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-global input {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 14px;
+    background: var(--white);
+    transition: all 0.2s;
+}
+
+.search-global input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.search-global::before {
+    content: '🔍';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+}
+
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    padding: 6px 14px 6px 6px;
+    border-radius: 30px;
+    border: 1px solid var(--gray-200);
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.user-name { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.user-role { font-size: 11px; color: var(--gray-500); }
+
+/* CARDS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    border: 1px solid var(--gray-200);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--gray-500);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1;
+}
+
+.stat-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.stat-change.up { color: var(--success); background: #d1fae5; }
+.stat-change.down { color: var(--danger); background: #fee2e2; }
+
+.stat-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--primary-50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+/* PANELS */
+.panel {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.panel-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.panel-body { padding: 22px; }
+
+/* BUTTONS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(6, 182, 212, 0.4);
+}
+
+.btn-secondary {
+    background: var(--gray-100);
+    color: var(--gray-700);
+}
+
+.btn-secondary:hover { background: var(--gray-200); }
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover { background: #dc2626; }
+
+.btn-ghost {
+    background: transparent;
+    color: var(--gray-600);
+    padding: 6px 10px;
+}
+
+.btn-ghost:hover { background: var(--gray-100); color: var(--gray-900); }
+
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+/* TABLES */
+.table-wrap { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+}
+
+tr:hover td { background: var(--primary-50); }
+
+tr:last-child td { border-bottom: none; }
+
+/* BADGES */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.badge-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.badge-confirmed { background: #d1fae5; color: #065f46; }
+.badge-pending { background: #fef3c7; color: #92400e; }
+.badge-cancelled { background: #fee2e2; color: #991b1b; }
+.badge-completed { background: #dbeafe; color: #1e40af; }
+
+/* FORMS */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+
+.form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.form-input, .form-select, .form-textarea {
+    padding: 10px 13px;
+    border: 1px solid var(--gray-200);
+    border-radius: 9px;
+    font-size: 13px;
+    font-family: inherit;
+    background: var(--white);
+    transition: all 0.2s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-textarea { resize: vertical; min-height: 80px; }
+
+/* MODAL */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
+
+.modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s;
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--gray-400);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover { background: var(--gray-100); color: var(--gray-700); }
+
+.modal-body { padding: 24px; }
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* TOAST */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    animation: slideInRight 0.3s;
+    border-left: 4px solid var(--success);
+}
+
+.toast.error { border-left-color: var(--danger); }
+.toast.warning { border-left-color: var(--warning); }
+
+.toast-icon { font-size: 20px; }
+.toast-msg { font-size: 13px; font-weight: 500; color: var(--gray-800); flex: 1; }
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-500);
+}
+
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+.empty-title { font-size: 16px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; }
+.empty-desc { font-size: 13px; }
+
+/* CALENDAR */
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-header {
+    text-align: center;
+    padding: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    padding: 8px;
+    border-radius: 8px;
+    background: var(--gray-50);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-day:hover { background: var(--primary-light); }
+.calendar-day.today { background: var(--primary); color: white; font-weight: 700; }
+.calendar-day.other-month { opacity: 0.3; }
+.calendar-day .day-num { font-size: 12px; }
+.calendar-day .day-events {
+    font-size: 9px;
+    margin-top: auto;
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+.calendar-day.today .day-events { color: white; }
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.calendar-month { font-size: 16px; font-weight: 600; color: var(--gray-900); }
+
+/* UPLOAD AREA */
+.upload-area {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius);
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--gray-50);
+}
+
+.upload-area:hover {
+    border-color: var(--primary);
+    background: var(--primary-50);
+}
+
+.upload-icon { font-size: 40px; margin-bottom: 10px; }
+.upload-title { font-size: 15px; font-weight: 600; color: var(--gray-700); margin-bottom: 4px; }
+.upload-desc { font-size: 12px; color: var(--gray-500); }
+
+/* DOCUMENTS LIST */
+.doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+
+.doc-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: var(--gray-50);
+    border-radius: 10px;
+    border: 1px solid var(--gray-200);
+    transition: all 0.2s;
+}
+
+.doc-item:hover { background: var(--primary-50); border-color: var(--primary-light); }
+
+.doc-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.doc-info { flex: 1; }
+.doc-name { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+.doc-meta { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+
+/* CHART BARS */
+.chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 180px;
+    padding: 10px 0;
+}
+
+.chart-bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--primary), var(--accent));
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    min-height: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.chart-bar:hover { opacity: 0.8; }
+
+.chart-bar-label {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--gray-500);
+    white-space: nowrap;
+}
+
+.chart-bar-value {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+
+.section { display: none; animation: fadeIn 0.3s; }
+.section.active { display: block; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding: 20px; }
+    .menu-toggle { display: block !important; }
+}
+
+.menu-toggle {
+    display: none;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* Quick action cards */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.quick-action {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.quick-action:hover {
+    border-color: var(--primary);
+    background: var(--primary-50);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.quick-action-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.quick-action-text { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+.quick-action-desc { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: inherit;
+}
+
+.tab:hover { color: var(--primary-dark); }
+.tab.active { color: var(--primary-dark); border-bottom-color: var(--primary); }
+
+/* CID/CBHPM helper */
+.helper-box {
+    background: var(--primary-50);
+    border: 1px solid var(--primary-light);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--primary-dark);
+}
+
+.helper-box strong { display: block; margin-bottom: 4px; font-size: 12px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+    <div class="logo">
+        <div class="logo-icon">🏥</div>
+        <div class="logo-text">Smart<span>Clinic</span></div>
+    </div>
+
+    <div class="nav-section">Principal</div>
+    <button class="nav-item active" onclick="showSection('dashboard', this)">
+        <span class="icon">📊</span> Dashboard
+    </button>
+    <button class="nav-item" onclick="showSection('agenda', this)">
+        <span class="icon">📅</span> Agenda
+    </button>
+
+    <div class="nav-section">Cadastros</div>
+    <button class="nav-item" onclick="showSection('pacientes', this)">
+        <span class="icon">👥</span> Pacientes
+        <span class="badge" id="badge-pacientes">0</span>
+    </button>
+    <button class="nav-item" onclick="showSection('medicos', this)">
+        <span class="icon">👨‍⚕️</span> Médicos
+        <span class="badge" id="badge-medicos">0</span>
+    </button>
+    <button class="nav-item" onclick="showSection('secretarias', this)">
+        <span class="icon">👩‍</span> Secretárias
+        <span class="badge" id="badge-secretarias">0</span>
+    </button>
+    <button class="nav-item" onclick="showSection('convenios', this)">
+        <span class="icon">🏦</span> Convênios
+        <span class="badge" id="badge-convenios">0</span>
+    </button>
+
+    <div class="nav-section">Operacional</div>
+    <button class="nav-item" onclick="showSection('consultas', this)">
+        <span class="icon"></span> Consultas
+        <span class="badge" id="badge-consultas">0</span>
+    </button>
+    <button class="nav-item" onclick="showSection('documentos', this)">
+        <span class="icon"></span> Documentos
+    </button>
+    <button class="nav-item" onclick="showSection('relatorios', this)">
+        <span class="icon">📈</span> Relatórios
+    </button>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+    <!-- HEADER -->
+    <div class="top-header">
+        <div>
+            <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <div class="page-subtitle" id="pageSubtitle">Visão geral do consultório</div>
+        </div>
+        <div class="header-actions">
+            <div class="search-global">
+                <input type="text" id="globalSearch" placeholder="Buscar paciente, médico, consulta..." oninput="handleGlobalSearch(this.value)">
+            </div>
+            <div class="user-chip">
+                <div class="user-avatar">FP</div>
+                <div>
+                    <div class="user-name">Fernanda Peres</div>
+                    <div class="user-role">Administradora</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="section active" id="section-dashboard">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-label">Pacientes Ativos</div>
+                <div class="stat-value" id="stat-pacientes">0</div>
+                <div class="stat-change up">↑ Atualizado</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🩺</div>
+                <div class="stat-label">Consultas Hoje</div>
+                <div class="stat-value" id="stat-consultas-hoje">0</div>
+                <div class="stat-change up">↑ Hoje</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👨‍⚕️</div>
+                <div class="stat-label">Médicos Cadastrados</div>
+                <div class="stat-value" id="stat-medicos">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-label">Faturamento Mensal</div>
+                <div class="stat-value" id="stat-faturamento">R$ 0</div>
+                <div class="stat-change up">↑ Este mês</div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <div class="quick-action" onclick="showSection('pacientes', document.querySelectorAll('.nav-item')[3]); setTimeout(()=>openModal('paciente'), 100)">
+                <div class="quick-action-icon">➕</div>
+                <div>
+                    <div class="quick-action-text">Novo Paciente</div>
+                    <div class="quick-action-desc">Cadastrar paciente</div>
+                </div>
+            </div>
+            <div class="quick-action" onclick="showSection('consultas', document.querySelectorAll('.nav-item')[7]); setTimeout(()=>openModal('consulta'), 100)">
+                <div class="quick-action-icon"></div>
+                <div>
+                    <div class="quick-action-text">Agendar Consulta</div>
+                    <div class="quick-action-desc">Nova consulta</div>
+                </div>
+            </div>
+            <div class="quick-action" onclick="showSection('documentos', document.querySelectorAll('.nav-item')[8])">
+                <div class="quick-action-icon">📁</div>
+                <div>
+                    <div class="quick-action-text">Upload Documento</div>
+                    <div class="quick-action-desc">Enviar arquivo</div>
+                </div>
+            </div>
+            <div class="quick-action" onclick="showSection('relatorios', document.querySelectorAll('.nav-item')[9])">
+                <div class="quick-action-icon">📊</div>
+                <div>
+                    <div class="quick-action-text">Relatório</div>
+                    <div class="quick-action-desc">Ver faturamento</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">📊 Faturamento dos Últimos 6 Meses</div>
+            </div>
+            <div class="panel-body">
+                <div class="chart-bars" id="chart-bars"></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">️ Próximas Consultas</div>
+                <button class="btn btn-primary btn-sm" onclick="showSection('consultas', document.querySelectorAll('.nav-item')[7]); setTimeout(()=>openModal('consulta'), 100)">+ Nova Consulta</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Data/Hora</th>
+                            <th>Convênio</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-consultas"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PACIENTES -->
+    <div class="section" id="section-pacientes">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title"> Pacientes Cadastrados</div>
+                <button class="btn btn-primary" onclick="openModal('paciente')">+ Novo Paciente</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Telefone</th>
+                            <th>Convênio</th>
+                            <th>Data Nasc.</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-pacientes"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MÉDICOS -->
+    <div class="section" id="section-medicos">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">👨‍⚕️ Médicos Cadastrados</div>
+                <button class="btn btn-primary" onclick="openModal('medico')">+ Novo Médico</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CRM</th>
+                            <th>Especialidade</th>
+                            <th>Telefone</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-medicos"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECRETÁRIAS -->
+    <div class="section" id="section-secretarias">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">👩‍💼 Secretárias Cadastradas</div>
+                <button class="btn btn-primary" onclick="openModal('secretaria')">+ Nova Secretária</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Matrícula</th>
+                            <th>Telefone</th>
+                            <th>Email</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-secretarias"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONVÊNIOS -->
+    <div class="section" id="section-convenios">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title"> Convênios Cadastrados</div>
+                <button class="btn btn-primary" onclick="openModal('convenio')">+ Novo Convênio</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Código</th>
+                            <th>Tabela CBHPM</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-convenios"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSULTAS -->
+    <div class="section" id="section-consultas">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">🩺 Consultas Agendadas</div>
+                <button class="btn btn-primary" onclick="openModal('consulta')">+ Nova Consulta</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Data/Hora</th>
+                            <th>CID-10</th>
+                            <th>Valor (CBHPM)</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-consultas"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGENDA -->
+    <div class="section" id="section-agenda">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">📅 Agenda Médica</div>
+            </div>
+            <div class="panel-body">
+                <div class="calendar-nav">
+                    <button class="btn btn-secondary btn-sm" onclick="changeMonth(-1)">← Anterior</button>
+                    <div class="calendar-month" id="calendar-month"></div>
+                    <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)">Próximo →</button>
+                </div>
+                <div class="calendar" id="calendar"></div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title" id="agenda-day-title">Consultas do Dia</div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agenda-day-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOCUMENTOS -->
+    <div class="section" id="section-documentos">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">📁 Gerenciamento de Documentos Médicos</div>
+            </div>
+            <div class="panel-body">
+                <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-title">Clique para fazer upload ou arraste arquivos aqui</div>
+                    <div class="upload-desc">Formatos aceitos: PDF, JPG, PNG (Máx. 10MB)</div>
+                    <input type="file" id="file-input" style="display:none" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload(event)">
+                </div>
+                <div class="doc-list" id="doc-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RELATÓRIOS -->
+    <div class="section" id="section-relatorios">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total de Consultas</div>
+                <div class="stat-value" id="rel-total-consultas">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Faturamento Total</div>
+                <div class="stat-value" id="rel-faturamento-total">R$ 0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Consultas Confirmadas</div>
+                <div class="stat-value" id="rel-confirmadas">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Consultas Pendentes</div>
+                <div class="stat-value" id="rel-pendentes">0</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">💰 Relatório de Faturamento por Convênio</div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Convênio</th>
+                            <th>Nº de Consultas</th>
+                            <th>Faturamento</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rel-faturamento-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- MODAL CONTAINER -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modal-content"></div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ============ DATA STORE (LocalStorage) ============
+const DB = {
+    get(key) { return JSON.parse(localStorage.getItem('smartclinic_' + key) || '[]'); },
+    set(key, data) { localStorage.setItem('smartclinic_' + key, JSON.stringify(data)); },
+    getOne(key, id) { return this.get(key).find(x => x.id === id); }
+};
+
+// Seed initial data if empty
+function seedData() {
+    if (DB.get('pacientes').length === 0) {
+        DB.set('pacientes', [
+            { id: 1, nome: 'João Silva', cpf: '123.456.789-00', telefone: '(11) 98765-4321', convenio: 'Unimed', dataNasc: '1985-03-15', email: 'joao@email.com' },
+            { id: 2, nome: 'Maria Santos', cpf: '987.654.321-00', telefone: '(11) 91234-5678', convenio: 'Particular', dataNasc: '1990-07-22', email: 'maria@email.com' },
+            { id: 3, nome: 'Pedro Alves', cpf: '456.789.123-00', telefone: '(11) 99876-5432', convenio: 'Bradesco Saúde', dataNasc: '1978-11-30', email: 'pedro@email.com' }
+        ]);
+    }
+    if (DB.get('medicos').length === 0) {
+        DB.set('medicos', [
+            { id: 1, nome: 'Dr. Gustavo Mendes', crm: 'CRM/SP 123456', especialidade: 'Cardiologia', telefone: '(11) 97777-1111' },
+            { id: 2, nome: 'Dra. Sara Martins', crm: 'CRM/SP 654321', especialidade: 'Dermatologia', telefone: '(11) 97777-2222' },
+            { id: 3, nome: 'Dr. Leonardo Pol', crm: 'CRM/SP 789456', especialidade: 'Ortopedia', telefone: '(11) 97777-3333' }
+        ]);
+    }
+    if (DB.get('secretarias').length === 0) {
+        DB.set('secretarias', [
+            { id: 1, nome: 'Fernanda Peres', matricula: 'SEC001', telefone: '(11) 96666-1111', email: 'fernanda@smartclinic.com' },
+            { id: 2, nome: 'Sabrina Alves', matricula: 'SEC002', telefone: '(11) 96666-2222', email: 'sabrina@smartclinic.com' }
+        ]);
+    }
+    if (DB.get('convenios').length === 0) {
+        DB.set('convenios', [
+            { id: 1, nome: 'Unimed', codigo: 'UNI001', tabela: 'CBHPM 2026' },
+            { id: 2, nome: 'Bradesco Saúde', codigo: 'BRA001', tabela: 'CBHPM 2026' },
+            { id: 3, nome: 'SulAmérica', codigo: 'SUL001', tabela: 'CBHPM 2026' },
+            { id: 4, nome: 'Particular', codigo: 'PAR001', tabela: 'Tabela Própria' }
+        ]);
+    }
+    if (DB.get('consultas').length === 0) {
+        const hoje = new Date().toISOString().split('T')[0];
+        const amanha = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+        DB.set('consultas', [
+            { id: 1, pacienteId: 1, medicoId: 1, data: hoje, hora: '14:00', cid10: 'I10', cbhpm: 350, status: 'confirmado', observacoes: 'Retorno' },
+            { id: 2, pacienteId: 2, medicoId: 2, data: hoje, hora: '15:30', cid10: 'L30.9', cbhpm: 280, status: 'pendente', observacoes: 'Primeira consulta' },
+            { id: 3, pacienteId: 3, medicoId: 3, data: amanha, hora: '09:00', cid10: 'M54.5', cbhpm: 420, status: 'confirmado', observacoes: 'Dor lombar' }
+        ]);
+    }
+    if (DB.get('documentos').length === 0) {
+        DB.set('documentos', [
+            { id: 1, nome: 'Laudo_Joao_Silva.pdf', tipo: 'Laudo', paciente: 'João Silva', data: '2026-05-28', tamanho: '2.4 MB' },
+            { id: 2, nome: 'Receita_Maria_Santos.pdf', tipo: 'Receita', paciente: 'Maria Santos', data: '2026-05-30', tamanho: '156 KB' }
+        ]);
+    }
+}
+seedData();
+
+// ============ TOAST NOTIFICATIONS ============
+function toast(msg, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    const icons = { success: '✅', error: '❌', warning: '️' };
+    el.innerHTML = `<span class="toast-icon">${icons[type]}</span><span class="toast-msg">${msg}</span>`;
+    container.appendChild(el);
+    setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(100px)'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+// ============ NAVIGATION ============
+const titles = {
+    dashboard: ['Dashboard', 'Visão geral do consultório'],
+    pacientes: ['Pacientes', 'Gerenciamento de pacientes'],
+    medicos: ['Médicos', 'Corpo clínico cadastrado'],
+    secretarias: ['Secretárias', 'Equipe administrativa'],
+    convenios: ['Convênios', 'Convênios e tabelas CBHPM'],
+    consultas: ['Consultas', 'Agendamento e suporte a decisão (CID-10/CBHPM)'],
+    agenda: ['Agenda Médica', 'Visualização de horários'],
+    documentos: ['Documentos', 'Laudos, receitas e exames'],
+    relatorios: ['Relatórios', 'Faturamento e indicadores']
+};
+
+function showSection(id, navEl) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if (navEl) navEl.classList.add('active');
+    document.getElementById('pageTitle').textContent = titles[id][0];
+    document.getElementById('pageSubtitle').textContent = titles[id][1];
+    document.getElementById('sidebar').classList.remove('open');
+    renderAll();
+}
+
+// ============ MODAL SYSTEM ============
+function openModal(type, editId = null) {
+    const overlay = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+    const edit = editId ? DB.getOne(type + 's', editId) : null;
+    
+    let html = '';
+    
+    if (type === 'paciente') {
+        html = `
+            <div class="modal-header">
+                <div class="modal-title">${edit ? '✏️ Editar' : '➕ Novo'} Paciente</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-paciente" onsubmit="savePaciente(event, ${editId || 'null'})">
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label class="form-label">Nome Completo *</label>
+                            <input class="form-input" name="nome" required value="${edit?.nome || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CPF *</label>
+                            <input class="form-input" name="cpf" required value="${edit?.cpf || ''}" placeholder="000.000.000-00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data de Nascimento *</label>
+                            <input class="form-input" type="date" name="dataNasc" required value="${edit?.dataNasc || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone *</label>
+                            <input class="form-input" name="telefone" required value="${edit?.telefone || ''}" placeholder="(00) 00000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input class="form-input" type="email" name="email" value="${edit?.email || ''}">
+                        </div>
+                        <div class="form-group full">
+                            <label class="form-label">Convênio</label>
+                            <select class="form-select" name="convenio">
+                                ${DB.get('convenios').map(c => `<option value="${c.nome}" ${edit?.convenio === c.nome ? 'selected' : ''}>${c.nome}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('form-paciente').requestSubmit()">💾 Salvar</button>
+            </div>
+        `;
+    } else if (type === 'medico') {
+        html = `
+            <div class="modal-header">
+                <div class="modal-title">${edit ? '✏️ Editar' : ' Novo'} Médico</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-medico" onsubmit="saveMedico(event, ${editId || 'null'})">
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label class="form-label">Nome Completo *</label>
+                            <input class="form-input" name="nome" required value="${edit?.nome || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CRM *</label>
+                            <input class="form-input" name="crm" required value="${edit?.crm || ''}" placeholder="CRM/SP 000000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Especialidade *</label>
+                            <input class="form-input" name="especialidade" required value="${edit?.especialidade || ''}">
+                        </div>
+                        <div class="form-group full">
+                            <label class="form-label">Telefone</label>
+                            <input class="form-input" name="telefone" value="${edit?.telefone || ''}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('form-medico').requestSubmit()">💾 Salvar</button>
+            </div>
+        `;
+    } else if (type === 'secretaria') {
+        html = `
+            <div class="modal-header">
+                <div class="modal-title">${edit ? '✏️ Editar' : '➕ Nova'} Secretária</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-secretaria" onsubmit="saveSecretaria(event, ${editId || 'null'})">
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label class="form-label">Nome Completo *</label>
+                            <input class="form-input" name="nome" required value="${edit?.nome || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Matrícula *</label>
+                            <input class="form-input" name="matricula" required value="${edit?.matricula || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone</label>
+                            <input class="form-input" name="telefone" value="${edit?.telefone || ''}">
+                        </div>
+                        <div class="form-group full">
+                            <label class="form-label">Email</label>
+                            <input class="form-input" type="email" name="email" value="${edit?.email || ''}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('form-secretaria').requestSubmit()">💾 Salvar</button>
+            </div>
+        `;
+    } else if (type === 'convenio') {
+        html = `
+            <div class="modal-header">
+                <div class="modal-title">${edit ? '✏️ Editar' : '➕ Novo'} Convênio</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-convenio" onsubmit="saveConvenio(event, ${editId || 'null'})">
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label class="form-label">Nome do Convênio *</label>
+                            <input class="form-input" name="nome" required value="${edit?.nome || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Código *</label>
+                            <input class="form-input" name="codigo" required value="${edit?.codigo || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tabela CBHPM</label>
+                            <select class="form-select" name="tabela">
+                                <option ${edit?.tabela === 'CBHPM 2026' ? 'selected' : ''}>CBHPM 2026</option>
+                                <option ${edit?.tabela === 'Tabela Própria' ? 'selected' : ''}>Tabela Própria</option>
+                                <option ${edit?.tabela === 'CBHPM Especializada' ? 'selected' : ''}>CBHPM Especializada</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('form-convenio').requestSubmit()">💾 Salvar</button>
+            </div>
+        `;
+    } else if (type === 'consulta') {
+        const pacientes = DB.get('pacientes');
+        const medicos = DB.get('medicos');
+        html = `
+            <div class="modal-header">
+                <div class="modal-title">${edit ? '✏️ Editar' : '➕ Nova'} Consulta</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-consulta" onsubmit="saveConsulta(event, ${editId || 'null'})">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Paciente *</label>
+                            <select class="form-select" name="pacienteId" required>
+                                <option value="">Selecione...</option>
+                                ${pacientes.map(p => `<option value="${p.id}" ${edit?.pacienteId === p.id ? 'selected' : ''}>${p.nome}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Médico *</label>
+                            <select class="form-select" name="medicoId" required>
+                                <option value="">Selecione...</option>
+                                ${medicos.map(m => `<option value="${m.id}" ${edit?.medicoId === m.id ? 'selected' : ''}>${m.nome} - ${m.especialidade}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data *</label>
+                            <input class="form-input" type="date" name="data" required value="${edit?.data || new Date().toISOString().split('T')[0]}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hora *</label>
+                            <input class="form-input" type="time" name="hora" required value="${edit?.hora || '09:00'}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CID-10 (Suporte a Decisão)</label>
+                            <input class="form-input" name="cid10" value="${edit?.cid10 || ''}" placeholder="Ex: I10, J01, M54.5" oninput="showCIDHelp(this.value)">
+                            <div class="helper-box" id="cid-help" style="display:none">
+                                <strong>📘 CID-10 - Classificação Internacional de Doenças</strong>
+                                <span id="cid-desc">Digite um código para ver a descrição</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Valor CBHPM (R$)</label>
+                            <input class="form-input" type="number" step="0.01" name="cbhpm" value="${edit?.cbhpm || ''}" placeholder="0,00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status">
+                                <option value="pendente" ${edit?.status === 'pendente' ? 'selected' : ''}>⏳ Pendente</option>
+                                <option value="confirmado" ${edit?.status === 'confirmado' ? 'selected' : ''}>✅ Confirmado</option>
+                                <option value="concluido" ${edit?.status === 'concluido' ? 'selected' : ''}>✔️ Concluído</option>
+                                <option value="cancelado" ${edit?.status === 'cancelado' ? 'selected' : ''}> Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="form-group full">
+                            <label class="form-label">Observações</label>
+                            <textarea class="form-textarea" name="observacoes">${edit?.observacoes || ''}</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('form-consulta').requestSubmit()">💾 Salvar</button>
+            </div>
+        `;
+    }
+    
+    content.innerHTML = html;
+    overlay.classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+}
+
+// ============ CID-10 HELPERS ============
+const cidDatabase = {
+    'I10': 'Hipertensão essencial (primária)',
+    'I25': 'Doença isquêmica crônica do coração',
+    'J01': 'Sinusite aguda',
+    'J06': 'Infecção aguda das vias aéreas superiores',
+    'J18': 'Pneumonia, microrganismo não especificado',
+    'L30.9': 'Dermatite não especificada',
+    'M54.5': 'Dor lombar baixa',
+    'M79.3': 'Paniculite não especificada',
+    'R10': 'Dor abdominal e pélvica',
+    'R51': 'Cefaleia (dor de cabeça)',
+    'Z00': 'Exame geral de investigação de pessoas sem queixa',
+    'F32': 'Episódio depressivo'
+};
+
+function showCIDHelp(code) {
+    const help = document.getElementById('cid-help');
+    const desc = document.getElementById('cid-desc');
+    if (!help) return;
+    const upper = code.toUpperCase();
+    if (cidDatabase[upper]) {
+        help.style.display = 'block';
+        desc.textContent = `${upper} - ${cidDatabase[upper]}`;
+    } else if (code.length > 0) {
+        help.style.display = 'block';
+        desc.textContent = `Código "${upper}" não encontrado na base local. Consulte o manual CID-10 completo.`;
+    } else {
+        help.style.display = 'none';
+    }
+}
+
+// ============ SAVE FUNCTIONS ============
+function getNextId(type) {
+    const items = DB.get(type);
+    return items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+}
+
+function savePaciente(e, editId) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        nome: form.nome.value,
+        cpf: form.cpf.value,
+        dataNasc: form.dataNasc.value,
+        telefone: form.telefone.value,
+        email: form.email.value,
+        convenio: form.convenio.value
+    };
+    let items = DB.get('pacientes');
+    if (editId) {
+        const idx = items.findIndex(x => x.id === editId);
+        items[idx] = { ...items[idx], ...data };
+        toast('Paciente atualizado com sucesso!');
+    } else {
+        data.id = getNextId('pacientes');
+        items.push(data);
+        toast('✅ Novo paciente cadastrado: ' + data.nome);
+    }
+    DB.set('pacientes', items);
+    closeModal();
+    renderAll();
+}
+
+function saveMedico(e, editId) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        nome: form.nome.value,
+        crm: form.crm.value,
+        especialidade: form.especialidade.value,
+        telefone: form.telefone.value
+    };
+    let items = DB.get('medicos');
+    if (editId) {
+        const idx = items.findIndex(x => x.id === editId);
+        items[idx] = { ...items[idx], ...data };
+        toast('Médico atualizado com sucesso!');
+    } else {
+        data.id = getNextId('medicos');
+        items.push(data);
+        toast('✅ Novo médico cadastrado: ' + data.nome);
+    }
+    DB.set('medicos', items);
+    closeModal();
+    renderAll();
+}
+
+function saveSecretaria(e, editId) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        nome: form.nome.value,
+        matricula: form.matricula.value,
+        telefone: form.telefone.value,
+        email: form.email.value
+    };
+    let items = DB.get('secretarias');
+    if (editId) {
+        const idx = items.findIndex(x => x.id === editId);
+        items[idx] = { ...items[idx], ...data };
+        toast('Secretária atualizada com sucesso!');
+    } else {
+        data.id = getNextId('secretarias');
+        items.push(data);
+        toast('✅ Nova secretária cadastrada: ' + data.nome);
+    }
+    DB.set('secretarias', items);
+    closeModal();
+    renderAll();
+}
+
+function saveConvenio(e, editId) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        nome: form.nome.value,
+        codigo: form.codigo.value,
+        tabela: form.tabela.value
+    };
+    let items = DB.get('convenios');
+    if (editId) {
+        const idx = items.findIndex(x => x.id === editId);
+        items[idx] = { ...items[idx], ...data };
+        toast('Convênio atualizado com sucesso!');
+    } else {
+        data.id = getNextId('convenios');
+        items.push(data);
+        toast('✅ Novo convênio cadastrado: ' + data.nome);
+    }
+    DB.set('convenios', items);
+    closeModal();
+    renderAll();
+}
+
+function saveConsulta(e, editId) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+        pacienteId: parseInt(form.pacienteId.value),
+        medicoId: parseInt(form.medicoId.value),
+        data: form.data.value,
+        hora: form.hora.value,
+        cid10: form.cid10.value.toUpperCase(),
+        cbhpm: parseFloat(form.cbhpm.value) || 0,
+        status: form.status.value,
+        observacoes: form.observacoes.value
+    };
+    let items = DB.get('consultas');
+    if (editId) {
+        const idx = items.findIndex(x => x.id === editId);
+        items[idx] = { ...items[idx], ...data };
+        toast('Consulta atualizada com sucesso!');
+    } else {
+        data.id = getNextId('consultas');
+        items.push(data);
+        toast('✅ Consulta agendada com sucesso!');
+    }
+    DB.set('consultas', items);
+    closeModal();
+    renderAll();
+}
+
+function deleteItem(type, id) {
+    if (!confirm('Tem certeza que deseja excluir este registro?')) return;
+    let items = DB.get(type);
+    items = items.filter(x => x.id !== id);
+    DB.set(type, items);
+    toast('Registro excluído', 'warning');
+    renderAll();
+}
+
+// ============ DOCUMENT UPLOAD ============
+function handleFileUpload(e) {
+    const files = Array.from(e.target.files);
+    let docs = DB.get('documentos');
+    files.forEach(file => {
+        const doc = {
+            id: getNextId('documentos'),
+            nome: file.name,
+            tipo: file.name.endsWith('.pdf') ? 'PDF' : 'Imagem',
+            paciente: 'Não vinculado',
+            data: new Date().toISOString().split('T')[0],
+            tamanho: (file.size / 1024 / 1024).toFixed(2) + ' MB'
+        };
+        docs.push(doc);
+    });
+    DB.set('documentos', docs);
+    toast(`✅ ${files.length} documento(s) enviado(s) com sucesso!`);
+    renderAll();
+    e.target.value = '';
+}
+
+// ============ RENDER FUNCTIONS ============
+function renderAll() {
+    renderBadges();
+    renderDashboard();
+    renderPacientes();
+    renderMedicos();
+    renderSecretarias();
+    renderConvenios();
+    renderConsultas();
+    renderCalendar();
+    renderDocumentos();
+    renderRelatorios();
+}
+
+function renderBadges() {
+    document.getElementById('badge-pacientes').textContent = DB.get('pacientes').length;
+    document.getElementById('badge-medicos').textContent = DB.get('medicos').length;
+    document.getElementById('badge-secretarias').textContent = DB.get('secretarias').length;
+    document.getElementById('badge-convenios').textContent = DB.get('convenios').length;
+    document.getElementById('badge-consultas').textContent = DB.get('consultas').length;
+}
+
+function renderDashboard() {
+    const pacientes = DB.get('pacientes');
+    const consultas = DB.get('consultas');
+    const medicos = DB.get('medicos');
+    const hoje = new Date().toISOString().split('T')[0];
+    const consultasHoje = consultas.filter(c => c.data === hoje);
+    const faturamentoMes = consultas
+        .filter(c => c.data.startsWith(hoje.substring(0, 7)) && c.status !== 'cancelado')
+        .reduce((sum, c) => sum + c.cbhpm, 0);
+
+    document.getElementById('stat-pacientes').textContent = pacientes.length;
+    document.getElementById('stat-consultas-hoje').textContent = consultasHoje.length;
+    document.getElementById('stat-medicos').textContent = medicos.length;
+    document.getElementById('stat-faturamento').textContent = 'R$ ' + faturamentoMes.toLocaleString('pt-BR');
+
+    // Chart
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+    const values = months.map((_, i) => {
+        const m = String(i + 1).padStart(2, '0');
+        return consultas.filter(c => c.data.startsWith(`2026-${m}`) && c.status !== 'cancelado').reduce((s, c) => s + c.cbhpm, 0);
+    });
+    const max = Math.max(...values, 1000);
+    document.getElementById('chart-bars').innerHTML = values.map((v, i) => `
+        <div class="chart-bar" style="height: ${(v/max)*100}%">
+            <div class="chart-bar-value">R$${v}</div>
+            <div class="chart-bar-label">${months[i]}</div>
+        </div>
+    `).join('');
+
+    // Próximas consultas
+    const proximas = consultas
+        .filter(c => c.status !== 'cancelado')
+        .sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora))
+        .slice(0, 5);
+    
+    document.getElementById('dashboard-consultas').innerHTML = proximas.length === 0
+        ? `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📅</div><div class="empty-title">Nenhuma consulta agendada</div></div></td></tr>`
+        : proximas.map(c => {
+            const p = pacientes.find(x => x.id === c.pacienteId);
+            const m = medicos.find(x => x.id === c.medicoId);
+            return `<tr>
+                <td><strong>${p?.nome || '-'}</strong></td>
+                <td>${m?.nome || '-'}</td>
+                <td>${formatDate(c.data)} ${c.hora}</td>
+                <td>${p?.convenio || '-'}</td>
+                <td><span class="badge-status badge-${c.status}">${statusLabel(c.status)}</span></td>
+                <td><button class="btn btn-ghost btn-sm" onclick="openModal('consulta', ${c.id})">️</button></td>
+            </tr>`;
+        }).join('');
+}
+
+function renderPacientes() {
+    const items = DB.get('pacientes');
+    document.getElementById('table-pacientes').innerHTML = items.length === 0
+        ? `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👥</div><div class="empty-title">Nenhum paciente cadastrado</div><div class="empty-desc">Clique em "Novo Paciente" para começar</div></div></td></tr>`
+        : items.map(p => `<tr>
+            <td><strong>${p.nome}</strong></td>
+            <td>${p.cpf}</td>
+            <td>${p.telefone}</td>
+            <td>${p.convenio}</td>
+            <td>${formatDate(p.dataNasc)}</td>
+            <td>
+                <button class="btn btn-ghost btn-sm" onclick="openModal('paciente', ${p.id})">️</button>
+                <button class="btn btn-ghost btn-sm" onclick="deleteItem('pacientes', ${p.id})">🗑️</button>
+            </td>
+        </tr>`).join('');
+}
+
+function renderMedicos() {
+    const items = DB.get('medicos');
+    document.getElementById('table-medicos').innerHTML = items.length === 0
+        ? `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">👨‍️</div><div class="empty-title">Nenhum médico cadastrado</div></div></td></tr>`
+        : items.map(m => `<tr>
+            <td><strong>${m.nome}</strong></td>
+            <td>${m.crm}</td>
+            <td>${m.especialidade}</td>
+            <td>${m.telefone}</td>
+            <td>
+                <button class="btn btn-ghost btn-sm" onclick="openModal('medico', ${m.id})">✏️</button>
+                <button class="btn btn-ghost btn-sm" onclick="deleteItem('medicos', ${m.id})">🗑️</button>
+            </td>
+        </tr>`).join('');
+}
+
+function renderSecretarias() {
+    const items = DB.get('secretarias');
+    document.getElementById('table-secretarias').innerHTML = items.length === 0
+        ? `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">👩‍💼</div><div class="empty-title">Nenhuma secretária cadastrada</div></div></td></tr>`
+        : items.map(s => `<tr>
+            <td><strong>${s.nome}</strong></td>
+            <td>${s.matricula}</td>
+            <td>${s.telefone}</td>
+            <td>${s.email}</td>
+            <td>
+                <button class="btn btn-ghost btn-sm" onclick="openModal('secretaria', ${s.id})">✏️</button>
+                <button class="btn btn-ghost btn-sm" onclick="deleteItem('secretarias', ${s.id})">🗑️</button>
+            </td>
+        </tr>`).join('');
+}
+
+function renderConvenios() {
+    const items = DB.get('convenios');
+    document.getElementById('table-convenios').innerHTML = items.length === 0
+        ? `<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">🏦</div><div class="empty-title">Nenhum convênio cadastrado</div></div></td></tr>`
+        : items.map(c => `<tr>
+            <td><strong>${c.nome}</strong></td>
+            <td>${c.codigo}</td>
+            <td>${c.tabela}</td>
+            <td>
+                <button class="btn btn-ghost btn-sm" onclick="openModal('convenio', ${c.id})">✏️</button>
+                <button class="btn btn-ghost btn-sm" onclick="deleteItem('convenios', ${c.id})">🗑️</button>
+            </td>
+        </tr>`).join('');
+}
+
+function renderConsultas() {
+    const consultas = DB.get('consultas');
+    const pacientes = DB.get('pacientes');
+    const medicos = DB.get('medicos');
+    document.getElementById('table-consultas').innerHTML = consultas.length === 0
+        ? `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"></div><div class="empty-title">Nenhuma consulta agendada</div></div></td></tr>`
+        : consultas.sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora)).map(c => {
+            const p = pacientes.find(x => x.id === c.pacienteId);
+            const m = medicos.find(x => x.id === c.medicoId);
+            return `<tr>
+                <td><strong>${p?.nome || '-'}</strong></td>
+                <td>${m?.nome || '-'}</td>
+                <td>${formatDate(c.data)} ${c.hora}</td>
+                <td><code style="background:var(--primary-light);padding:2px 6px;border-radius:4px;font-size:11px">${c.cid10 || '-'}</code></td>
+                <td>R$ ${c.cbhpm.toFixed(2)}</td>
+                <td><span class="badge-status badge-${c.status}">${statusLabel(c.status)}</span></td>
+                <td>
+                    <button class="btn btn-ghost btn-sm" onclick="openModal('consulta', ${c.id})">✏️</button>
+                    <button class="btn btn-ghost btn-sm" onclick="deleteItem('consultas', ${c.id})">🗑️</button>
+                </td>
+            </tr>`;
+        }).join('');
+}
+
+// ============ CALENDAR ============
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let selectedDay = new Date().getDate();
+
+function changeMonth(delta) {
+    currentMonth += delta;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    renderCalendar();
+}
+
+function renderCalendar() {
+    const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    document.getElementById('calendar-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+    const today = new Date();
+    const consultas = DB.get('consultas');
+
+    let html = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(d => `<div class="calendar-header">${d}</div>`).join('');
+
+    // Previous month days
+    for (let i = firstDay - 1; i >= 0; i--) {
+        html += `<div class="calendar-day other-month"><span class="day-num">${daysInPrevMonth - i}</span></div>`;
+    }
+
+    // Current month days
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const dayConsultas = consultas.filter(c => c.data === dateStr);
+        const isToday = today.getDate() === d && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+        const isSelected = selectedDay === d;
+        html += `<div class="calendar-day ${isToday ? 'today' : ''}" style="${isSelected && !isToday ? 'background:var(--primary-light);border:2px solid var(--primary)' : ''}" onclick="selectDay(${d})">
+            <span class="day-num">${d}</span>
+            ${dayConsultas.length > 0 ? `<span class="day-events">${dayConsultas.length} consulta${dayConsultas.length > 1 ? 's' : ''}</span>` : ''}
+        </div>`;
+    }
+
+    // Next month days
+    const totalCells = firstDay + daysInMonth;
+    const remaining = 7 - (totalCells % 7);
+    if (remaining < 7) {
+        for (let i = 1; i <= remaining; i++) {
+            html += `<div class="calendar-day other-month"><span class="day-num">${i}</span></div>`;
+        }
+    }
+
+    document.getElementById('calendar').innerHTML = html;
+    renderAgendaDay();
+}
+
+function selectDay(d) {
+    selectedDay = d;
+    renderCalendar();
+}
+
+function renderAgendaDay() {
+    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+    document.getElementById('agenda-day-title').textContent = `Consultas de ${formatDate(dateStr)}`;
+    
+    const consultas = DB.get('consultas').filter(c => c.data === dateStr).sort((a, b) => a.hora.localeCompare(b.hora));
+    const pacientes = DB.get('pacientes');
+    const medicos = DB.get('medicos');
+
+    document.getElementById('agenda-day-table').innerHTML = consultas.length === 0
+        ? `<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">📅</div><div class="empty-title">Nenhuma consulta neste dia</div></div></td></tr>`
+        : consultas.map(c => {
+            const p = pacientes.find(x => x.id === c.pacienteId);
+            const m = medicos.find(x => x.id === c.medicoId);
+            return `<tr>
+                <td><strong>${c.hora}</strong></td>
+                <td>${p?.nome || '-'}</td>
+                <td>${m?.nome || '-'}</td>
+                <td><span class="badge-status badge-${c.status}">${statusLabel(c.status)}</span></td>
+            </tr>`;
+        }).join('');
+}
+
+// ============ DOCUMENTOS ============
+function renderDocumentos() {
+    const docs = DB.get('documentos');
+    document.getElementById('doc-list').innerHTML = docs.length === 0
+        ? `<div class="empty-state"><div class="empty-icon">📁</div><div class="empty-title">Nenhum documento enviado</div></div>`
+        : docs.map(d => `<div class="doc-item">
+            <div class="doc-icon">${d.tipo === 'PDF' ? '' : '🖼️'}</div>
+            <div class="doc-info">
+                <div class="doc-name">${d.nome}</div>
+                <div class="doc-meta">${d.tipo} • ${d.paciente} • ${formatDate(d.data)} • ${d.tamanho}</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="deleteItem('documentos', ${d.id})">🗑️</button>
+        </div>`).join('');
+}
+
+// ============ RELATÓRIOS ============
+function renderRelatorios() {
+    const consultas = DB.get('consultas');
+    const pacientes = DB.get('pacientes');
+    const total = consultas.length;
+    const faturamento = consultas.filter(c => c.status !== 'cancelado').reduce((s, c) => s + c.cbhpm, 0);
+    const confirmadas = consultas.filter(c => c.status === 'confirmado' || c.status === 'concluido').length;
+    const pendentes = consultas.filter(c => c.status === 'pendente').length;
+
+    document.getElementById('rel-total-consultas').textContent = total;
+    document.getElementById('rel-faturamento-total').textContent = 'R$ ' + faturamento.toLocaleString('pt-BR');
+    document.getElementById('rel-confirmadas').textContent = confirmadas;
+    document.getElementById('rel-pendentes').textContent = pendentes;
+
+    // Faturamento por convênio
+    const porConvenio = {};
+    consultas.filter(c => c.status !== 'cancelado').forEach(c => {
+        const p = pacientes.find(x => x.id === c.pacienteId);
+        const conv = p?.convenio || 'Não informado';
+        if (!porConvenio[conv]) porConvenio[conv] = { count: 0, total: 0 };
+        porConvenio[conv].count++;
+        porConvenio[conv].total += c.cbhpm;
+    });
+
+    document.getElementById('rel-faturamento-table').innerHTML = Object.keys(porConvenio).length === 0
+        ? `<tr><td colspan="3"><div class="empty-state">Sem dados</div></td></tr>`
+        : Object.entries(porConvenio).map(([conv, data]) => `<tr>
+            <td><strong>${conv}</strong></td>
+            <td>${data.count}</td>
+            <td>R$ ${data.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+        </tr>`).join('');
+}
+
+// ============ HELPERS ============
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const [y, m, d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+}
+
+function statusLabel(s) {
+    const map = { confirmado: 'Confirmado', pendente: 'Pendente', concluido: 'Concluído', cancelado: 'Cancelado' };
+    return map[s] || s;
+}
+
+function handleGlobalSearch(q) {
+    if (!q) return;
+    q = q.toLowerCase();
+    const pacientes = DB.get('pacientes').filter(p => p.nome.toLowerCase().includes(q));
+    const medicos = DB.get('medicos').filter(m => m.nome.toLowerCase().includes(q));
+    if (pacientes.length > 0) {
+        showSection('pacientes', document.querySelectorAll('.nav-item')[3]);
+    } else if (medicos.length > 0) {
+        showSection('medicos', document.querySelectorAll('.nav-item')[4]);
+    }
+}
+
+// ============ INIT ============
+renderAll();
+</script>
+</body>
+</html>
